@@ -1,7 +1,7 @@
 # health-connect-sync-android
 
 A small Android app that reads your **Health Connect** data and POSTs it to **your own server**. It's the phone-side companion
-of [health-connect-mcp](../health-connect-mcp), but it speaks plain JSON over HTTPS, so any endpoint that accepts it will work.
+of [health-connect-mcp](https://github.com/weissmike/health-connect-mcp), but it speaks plain JSON over HTTPS, so any endpoint that accepts it will work.
 
 - Read-only access to Health Connect. Nothing leaves the phone except to the URL you configure, with your bearer token.
 - 23 record types: weight, body fat, lean body mass, height, BMR, steps, distance, floors, active and total calories,

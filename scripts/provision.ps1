@@ -20,9 +20,14 @@ param(
 $ErrorActionPreference = "Stop"
 if (-not $Adb) {
     $cmd = Get-Command adb -ErrorAction SilentlyContinue
-    $Adb = if ($cmd) { $cmd.Source } else { Join-Path $env:LOCALAPPDATA "Android\Sdk\platform-tools\adb.exe" }
+    if ($cmd) {
+        $Adb = $cmd.Source
+    } else {
+        $roots = @($env:ANDROID_HOME, $env:ANDROID_SDK_ROOT, (Join-Path $env:LOCALAPPDATA "Android\Sdk")) | Where-Object { $_ }
+        $Adb = ($roots | ForEach-Object { Join-Path $_ "platform-tools\adb.exe" } | Where-Object { Test-Path $_ } | Select-Object -First 1)
+    }
 }
-if (-not (Test-Path $Adb)) { throw "adb not found. Pass -Adb <path to adb.exe>." }
+if (-not $Adb -or -not (Test-Path $Adb)) { throw "adb not found. Install Android platform-tools, set ANDROID_HOME, or pass -Adb <path to adb.exe>." }
 if ($Url -notmatch '^https://') { throw "Url must start with https://" }
 
 $token = (Get-Content -Raw -Path $TokenFile).Trim()
